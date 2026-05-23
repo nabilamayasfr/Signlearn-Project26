@@ -1,0 +1,336 @@
+<style>
+  .beranda-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 48px;
+    background: #FEE6F2;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 16px rgba(200,45,133,0.08);
+    font-family: Poppins, sans-serif;
+  }
+
+  .beranda-nav nav {
+    display: flex;
+    gap: 32px;
+  }
+
+  .beranda-nav nav a {
+    position: relative;
+    padding-bottom: 3px;
+    color: #492F48;
+    font-size: 14.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .beranda-nav nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #C82D85;
+    border-radius: 9px;
+    transition: width 0.22s;
+  }
+
+  .beranda-nav nav a:hover {
+    color: #C82D85;
+  }
+
+  .beranda-nav nav a:hover::after,
+  .beranda-nav nav a.nav-active::after {
+    width: 100%;
+  }
+
+  .beranda-nav nav a.nav-active {
+    color: #C82D85;
+  }
+
+  .btn-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px 8px 10px;
+    border-radius: 50px;
+    background: #fff;
+    border: 1.5px solid #F2B8D8;
+    color: #742958;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 2px 10px rgba(200,45,133,0.12);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-profile:hover {
+    background: #FEE6F2;
+    border-color: #C82D85;
+    color: #C82D85;
+  }
+
+  .btn-profile .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F7DAED, #C82D85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .profile-dropdown {
+    position: relative;
+  }
+
+  .profile-menu {
+    position: absolute;
+    top: 58px;
+    right: 0;
+    width: 180px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid #f3d0e3;
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+    z-index: 999;
+  }
+
+  .profile-menu.show {
+    display: flex;
+  }
+
+  .profile-menu a,
+  .profile-menu button {
+    padding: 12px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    color: #492F48;
+    border-radius: 10px;
+    font-family: Poppins, sans-serif;
+  }
+
+  .profile-menu a:hover,
+  .profile-menu button:hover {
+    background: #FEE6F2;
+    color: #C82D85;
+  }
+
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2.5px;
+    background: #742958;
+    border-radius: 9px;
+    transition: all 0.3s;
+  }
+
+  .nav-mobile-menu {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: #FEE6F2;
+    padding: 12px 20px 16px;
+    border-top: 1px solid #F2B8D8;
+    font-family: Poppins, sans-serif;
+  }
+
+  .nav-mobile-menu a {
+    padding: 10px 8px;
+    color: #492F48;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+
+  .nav-mobile-menu a:hover,
+  .nav-mobile-menu a.nav-active {
+    color: #C82D85;
+    background: #F7DAED;
+    padding-left: 14px;
+  }
+
+  .nav-mobile-menu .profile-link-mobile {
+    margin-top: 8px;
+    border-top: 1px solid #F2B8D8;
+    padding-top: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .beranda-nav {
+      padding: 14px 20px;
+      flex-wrap: wrap;
+    }
+
+    .beranda-nav nav {
+      display: none;
+    }
+
+    .btn-profile {
+      display: none;
+    }
+
+    .nav-hamburger {
+      display: flex;
+    }
+
+    .nav-mobile-menu.open {
+      display: flex;
+    }
+
+    .nav-mobile-menu .btn-profile {
+      display: inline-flex;
+    }
+  }
+</style>
+
+<header class="beranda-nav">
+  <!-- Logo -->
+  <a href="{{ url_for('web.index') }}">
+    <img src="{{ url_for('static', filename='assets/images/logo.png') }}" style="width:120px;" alt="SignLearn">
+  </a>
+
+  <!-- Desktop Nav -->
+  <nav>
+    <a href="{{ url_for('web.index') }}"
+       class="{{ 'nav-active' if request.endpoint == 'web.index' else '' }}">
+      Beranda
+    </a>
+
+    <a href="{{ url_for('web.pembelajaran') }}"
+       class="{{ 'nav-active' if request.endpoint == 'web.pembelajaran' else '' }}">
+      Pembelajaran
+    </a>
+
+    <a href="{{ url_for('web.latihan') }}"
+       class="{{ 'nav-active' if request.endpoint == 'web.latihan' else '' }}">
+      Latihan
+    </a>
+
+    <a href="{{ url_for('web.detection') }}"
+       class="{{ 'nav-active' if request.endpoint == 'web.detection' else '' }}">
+      Deteksi
+    </a>
+
+    <a href="{{ url_for('web.history') }}"
+       class="{{ 'nav-active' if request.endpoint == 'web.history' else '' }}">
+      Histori
+    </a>
+  </nav>
+
+  <!-- Desktop Profile Button -->
+  <div class="profile-dropdown">
+    <button class="btn-profile" onclick="toggleProfileMenu(event)">
+      <div class="avatar">
+        {{ user.name[0]|upper if user and user.name else 'A' }}
+      </div>
+      {{ user.name if user and user.name else 'User' }}
+    </button>
+
+    <div class="profile-menu" id="profileMenu">
+      <a href="{{ url_for('web.profile') }}">Profile</a>
+      <a href="{{ url_for('web.logout') }}">Keluar</a>
+    </div>
+  </div>
+
+  <!-- Hamburger Mobile -->
+  <div class="nav-hamburger" onclick="toggleMobileNav(event)" id="nav-hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="{{ url_for('web.index') }}"
+     class="{{ 'nav-active' if request.endpoint == 'web.index' else '' }}">
+    Beranda
+  </a>
+
+  <a href="{{ url_for('web.pembelajaran') }}"
+     class="{{ 'nav-active' if request.endpoint == 'web.pembelajaran' else '' }}">
+    Pembelajaran
+  </a>
+
+  <a href="{{ url_for('web.latihan') }}"
+     class="{{ 'nav-active' if request.endpoint == 'web.latihan' else '' }}">
+    Latihan
+  </a>
+
+  <a href="{{ url_for('web.detection') }}"
+     class="{{ 'nav-active' if request.endpoint == 'web.detection' else '' }}">
+    Deteksi
+  </a>
+
+  <a href="{{ url_for('web.history') }}"
+     class="{{ 'nav-active' if request.endpoint == 'web.history' else '' }}">
+    Histori
+  </a>
+
+  <div class="profile-link-mobile">
+    <a href="#" class="btn-profile">
+      <div class="avatar">
+        {{ user.name[0]|upper if user and user.name else 'A' }}
+      </div>
+      {{ user.name if user and user.name else 'User' }}
+    </a>
+  </div>
+</div>
+
+<script>
+  function toggleProfileMenu(event) {
+    event.stopPropagation();
+    const menu = document.getElementById('profileMenu');
+    if (menu) {
+      menu.classList.toggle('show');
+    }
+  }
+
+  function toggleMobileNav(event) {
+    event.stopPropagation();
+    const menu = document.getElementById('nav-mobile-menu');
+    if (menu) {
+      menu.classList.toggle('open');
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    const profileMenu = document.getElementById('profileMenu');
+    const mobileMenu = document.getElementById('nav-mobile-menu');
+    const hamburger = document.getElementById('nav-hamburger');
+
+    if (profileMenu) {
+      profileMenu.classList.remove('show');
+    }
+
+    if (mobileMenu && hamburger && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+      mobileMenu.classList.remove('open');
+    }
+  });
+</script>

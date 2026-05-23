@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}SignLearn - Masuk{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen flex items-center justify-center p-4" style="background-color: #FEE6F2;">
+    <div class="w-full max-w-4xl rounded-3xl overflow-hidden shadow-xl flex" style="min-height: 500px;">
+
+        <!-- KIRI: Ilustrasi -->
+        <div class="w-1/2 flex items-center justify-center"
+            style="background: linear-gradient(180deg, #F9C5E2 0%, #C07EB5 100%);">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}"
+                alt="Mascot SignLearn"
+                class="max-w-[80%] max-h-[80%] object-contain" />
+        </div>
+
+        <!-- KANAN: Form -->
+        <div class="w-1/2 flex flex-col justify-center px-10 py-8 bg-white">
+
+            <!-- Logo -->
+            <div class="flex justify-center mb-3">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}"
+                    alt="Logo SignLearn"
+                    class="h-16 object-contain" />
+            </div>
+
+            <!-- Heading -->
+            <h1 class="text-2xl font-bold text-center text-gray-800 mb-1">
+                Masuk Ke <span style="color: #C07EB5;">SIGNLEARN</span>
+            </h1>
+
+            <p class="text-center text-gray-500 text-xs mb-5">
+                Belajar Bahasa Isyarat dengan AI Secara Mandiri
+            </p>
+
+            <!-- Flash Message -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == 'success' %}
+                            <div class="bg-green-50 border border-green-200 rounded-xl px-4 py-2 mb-4">
+                                <p class="text-green-600 text-xs text-center">{{ message }}</p>
+                            </div>
+                        {% elif category == 'error' %}
+                            <div class="bg-red-50 border border-red-200 rounded-xl px-4 py-2 mb-4">
+                                <p class="text-red-500 text-xs text-center">{{ message }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Form -->
+            <form action="{{ url_for('web.login') }}" method="POST" class="space-y-3">
+
+                <!-- Email / Nama Pengguna -->
+                <div>
+                    <label class="block text-xs text-gray-600 mb-1 ml-1">
+                        Email / Nama Pengguna
+                    </label>
+
+                    <input type="text" name="login"
+                        value="{{ request.form.get('login', '') }}"
+                        autocomplete="username"
+                        class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-300 transition" />
+                </div>
+
+                <!-- Kata Sandi -->
+                <div>
+                    <label class="block text-xs text-gray-600 mb-1 ml-1">
+                        Kata Sandi
+                    </label>
+
+                    <div class="relative">
+                        <input type="password" name="password" id="password"
+                            autocomplete="current-password"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-300 transition pr-10" />
+
+                        <button type="button" id="togglePassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
+
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+
+                            <svg id="eyeOffIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3l18 18" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ingat Saya & Lupa Kata Sandi -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" name="remember" id="remember"
+                            class="rounded border-gray-300 text-pink-400 focus:ring-pink-300" />
+
+                        <span class="text-xs text-gray-600">Ingat saya</span>
+                    </label>
+
+                    <a href="#" class="text-xs font-semibold hover:underline" style="color: #C07EB5;">
+                        Lupa kata sandi?
+                    </a>
+                </div>
+
+                <!-- Tombol Masuk -->
+                <button type="submit"
+                    class="w-full py-2.5 rounded-xl text-white font-semibold text-sm tracking-wide transition duration-200 hover:opacity-90 active:scale-95 shadow-md"
+                    style="background-color: #D96FAD;">
+                    Masuk
+                </button>
+
+                <!-- Link Daftar -->
+                <p class="text-center text-xs text-gray-500 pt-1">
+                    Belum punya akun?
+                    <a href="{{ url_for('web.register') }}" class="font-bold text-gray-700 hover:underline">
+                        Daftar
+                    </a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const eyeOffIcon = document.getElementById('eyeOffIcon');
+
+    if (togglePassword) {
+        togglePassword.addEventListener('click', function () {
+            const isHidden = passwordInput.type === 'password';
+
+            passwordInput.type = isHidden ? 'text' : 'password';
+            eyeIcon.classList.toggle('hidden', isHidden);
+            eyeOffIcon.classList.toggle('hidden', !isHidden);
+        });
+    }
+</script>
+{% endblock %}
